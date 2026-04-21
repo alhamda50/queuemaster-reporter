@@ -1,6 +1,8 @@
 {
     "name": "queuemaster/reporter",
-    "description": "A package to report Laravel queue jobs to QueueMaster.",
+    "description": "Enterprise-grade Laravel queue monitoring reporter for QueueMaster.",
+    "keywords": ["laravel", "queue", "monitoring", "queuemaster"],
+    "license": "MIT",
     "type": "library",
     "require": {
         "php": "^8.2",
