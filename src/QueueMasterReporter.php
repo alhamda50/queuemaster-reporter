@@ -37,9 +37,11 @@ class QueueMasterReporter
                 ],
                 'json' => $payload,
             ]);
+        } catch (\GuzzleHttp\Exception\RequestException $e) {
+            $response = $e->hasResponse() ? $e->getResponse()->getBody()->getContents() : 'No response body';
+            Log::error('QueueMaster: Failed to report job status. Status: ' . ($e->hasResponse() ? $e->getResponse()->getStatusCode() : 'N/A') . ' Response: ' . $response);
         } catch (\Exception $e) {
-            // Fail silently to not disrupt the client application, but log it
-            Log::error('QueueMaster: Failed to report job status. ' . $e->getMessage());
+            Log::error('QueueMaster: Unexpected error reporting job status. ' . $e->getMessage());
         }
     }
 }
