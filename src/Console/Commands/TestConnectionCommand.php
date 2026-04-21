@@ -55,12 +55,29 @@ class TestConnectionCommand extends Command
 
             if ($response->successful()) {
                 $data = $response->json();
-                $this->info('✔ Connection successful!');
+                $this->info('✔ API Connection successful!');
+                $this->line("  Organization: " . ($data['data']['organization'] ?? 'Unknown'));
                 $this->line('');
-                $this->info("Organization: " . ($data['data']['organization'] ?? 'Unknown'));
-                $this->info("Server Time: " . ($data['data']['connected_at'] ?? 'N/A'));
-                $this->line('');
-                $this->comment('This application is now ready to report job statuses to QueueMaster.');
+
+                if ($this->confirm('Would you like to send a Real Test Event to your dashboard now?', true)) {
+                    $this->info('Sending test event...');
+                    
+                    $reporter = new \QueueMaster\Reporter\QueueMasterReporter();
+                    $reporter->send([
+                        'uuid' => (string) \Illuminate\Support\Str::uuid(),
+                        'name' => 'QueueMaster\Test\ConnectionTestJob',
+                        'status' => 'succeeded',
+                        'connection' => 'sync',
+                        'queue' => 'default',
+                        'attempt' => 1,
+                        'started_at' => now()->subSeconds(2)->toDateTimeString(),
+                        'finished_at' => now()->toDateTimeString(),
+                    ]);
+
+                    $this->info('✔ Test event sent! Please check your QueueMaster dashboard.');
+                    $this->comment('If it still doesn\'t appear, the issue is likely on the Master Server queue worker.');
+                }
+
                 return 0;
             }
 

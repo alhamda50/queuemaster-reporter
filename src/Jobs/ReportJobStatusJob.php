@@ -20,6 +20,7 @@ class ReportJobStatusJob implements ShouldQueue
 
     public function handle(QueueMasterReporter $reporter): void
     {
+        \Illuminate\Support\Facades\Log::info('QueueMaster: Processing reporting job for ' . ($this->payload['name'] ?? 'unknown'));
         $reporter->send($this->payload);
     }
 }
