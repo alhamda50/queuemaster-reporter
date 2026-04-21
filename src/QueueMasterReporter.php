@@ -19,13 +19,15 @@ class QueueMasterReporter
 
     public function send(array $payload)
     {
-        $endpoint = config('queuemaster.api_endpoint');
+        $serverUrl = config('queuemaster.server_url');
         $token = config('queuemaster.api_token');
 
-        if (empty($endpoint) || empty($token)) {
-            Log::warning('QueueMaster: API endpoint or token is not configured.');
+        if (empty($serverUrl) || empty($token)) {
+            Log::warning('QueueMaster: Server URL or API token is not configured.');
             return;
         }
+
+        $endpoint = rtrim($serverUrl, '/') . '/api/v1/jobs/events';
 
         try {
             $this->client->post($endpoint, [

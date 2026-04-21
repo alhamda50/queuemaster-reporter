@@ -13,8 +13,8 @@ return [
     | QueueMaster API Configuration
     |--------------------------------------------------------------------------
     */
-    'api_endpoint' => env('QUEUEMASTER_ENDPOINT', 'http://localhost:8000/api/v1/jobs/events'),
-    'api_token' => env('QUEUEMASTER_TOKEN', ''),
+    'server_url' => env('QUEUEMASTER_SERVER_URL', 'http://localhost:8000'),
+    'api_token' => env('QUEUEMASTER_API_TOKEN', ''),
 
     /*
     |--------------------------------------------------------------------------
