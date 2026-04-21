@@ -13,9 +13,15 @@ class QueueMasterReporterServiceProvider extends ServiceProvider
 {
     public function boot()
     {
-        $this->publishes([
-            __DIR__.'/../config/queuemaster.php' => config_path('queuemaster.php'),
-        ], 'queuemaster-config');
+        if ($this->app->runningInConsole()) {
+            $this->publishes([
+                __DIR__.'/../config/queuemaster.php' => config_path('queuemaster.php'),
+            ], 'queuemaster-config');
+
+            $this->commands([
+                Console\Commands\TestConnectionCommand::class,
+            ]);
+        }
 
         if (!config('queuemaster.enabled')) {
             return;
